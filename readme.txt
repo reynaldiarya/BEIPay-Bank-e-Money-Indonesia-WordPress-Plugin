@@ -1,4 +1,4 @@
-=== BEIPay - Bank dan e-Money Indonesia ===
+=== Indobe - Bank dan e-Money Indonesia ===
 Contributors: reynaldiarya
 Donate link: https://trakteer.id/reynaldiarya/tip
 Tags: woocommerce, payment, method, gateway, indonesia
@@ -12,7 +12,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Add Indonesian Bank & e-Money payments (BCA, Mandiri, QRIS, GoPay) to WooCommerce with unique payment codes.
 
 == Description ==
-**BEIPay - Bank dan e-Money Indonesia**
+**Indobe - Bank dan e-Money Indonesia**
 
 The WooCommerce Bank and e-Money Indonesia Payment Gateway plugin provides a comprehensive collection of Indonesian banks and e-Wallets for WooCommerce payments. 
 
@@ -30,7 +30,7 @@ By default, WooCommerce only provides a generic bank transfer option. This plugi
 * **QRIS:** Standard QRIS payment method support.
 
 == Installation ==
-1.  Upload the plugin files to the `/wp-content/plugins/beipay-for-woocommerce` directory, or install the plugin through the WordPress plugins screen directly.
+1.  Upload the plugin files to the `/wp-content/plugins/indobe-for-woocommerce` directory, or install the plugin through the WordPress plugins screen directly.
 2.  Activate the plugin through the 'Plugins' screen in WordPress.
 3.  Go to **WooCommerce > Settings > Payments**.
 4.  Enable the specific banks or e-money gateways you wish to accept.

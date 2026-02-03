@@ -60,10 +60,10 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
         $this->id                 = self::ID;
         $show_icon = 'yes' === $this->get_option('enable_icon', 'yes');
         $icon_url = $show_icon ? plugins_url('assets/logo-neo-commerce.png', __FILE__) : '';
-        $this->icon               = apply_filters('woocommerce_bank_neo_commerce_icon', $icon_url);
+        $this->icon               = apply_filters('indobe_bank_neo_commerce_icon', $icon_url);
         $this->has_fields         = false;
-        $this->method_title       = __('Bank Neo Commerce', 'beipay-for-woocommerce');
-        $this->method_description = __('Lakukan pembayaran melalui transfer langsung ke rekening Bank Neo Commerce.', 'beipay-for-woocommerce');
+        $this->method_title       = __('Bank Neo Commerce', 'indobe-for-woocommerce');
+        $this->method_description = __('Lakukan pembayaran melalui transfer langsung ke rekening Bank Neo Commerce.', 'indobe-for-woocommerce');
 
         // Load the settings.
         $this->init_form_fields();
@@ -76,7 +76,7 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
 
         // Bank Neo Commerce account fields shown on the thanks page and in emails.
         $this->account_details = get_option(
-            'woocommerce_bank_neo_commerce_accounts',
+            'indobe_bank_neo_commerce_accounts',
             array(
                 array(
                     'account_name'   => $this->get_option('account_name'),
@@ -104,36 +104,36 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
     {
         $this->form_fields = array(
             'enabled'         => array(
-                'title'   => __('Enable/Disable', 'beipay-for-woocommerce'),
+                'title'   => __('Enable/Disable', 'indobe-for-woocommerce'),
                 'type'    => 'checkbox',
-                'label'   => __('Enable Bank Neo Commerce', 'beipay-for-woocommerce'),
+                'label'   => __('Enable Bank Neo Commerce', 'indobe-for-woocommerce'),
                 'default' => 'no',
             ),
             'title'           => array(
-                'title'       => __('Title', 'beipay-for-woocommerce'),
+                'title'       => __('Title', 'indobe-for-woocommerce'),
                 'type'        => 'safe_text',
-                'description' => __('Mengatur judul yang dilihat pengguna selama proses checkout.', 'beipay-for-woocommerce'),
-                'default'     => __('Transfer Bank Neo Commerce', 'beipay-for-woocommerce'),
+                'description' => __('Mengatur judul yang dilihat pengguna selama proses checkout.', 'indobe-for-woocommerce'),
+                'default'     => __('Transfer Bank Neo Commerce', 'indobe-for-woocommerce'),
                 'desc_tip'    => true,
             ),
             'enable_icon' => array(
-                'title'         => __('Icon', 'beipay-for-woocommerce'),
-                'label'         => __('Enable Icon', 'beipay-for-woocommerce'),
+                'title'         => __('Icon', 'indobe-for-woocommerce'),
+                'label'         => __('Enable Icon', 'indobe-for-woocommerce'),
                 'type'          => 'checkbox',
                 'description'   => '<img src="' . plugins_url('assets/logo-neo-commerce.png', __FILE__) . '" style="height:100%;max-height:32px !important" />',
                 'default'       => 'no',
             ),
             'description'     => array(
-                'title'       => __('Description', 'beipay-for-woocommerce'),
+                'title'       => __('Description', 'indobe-for-woocommerce'),
                 'type'        => 'textarea',
-                'description' => __('Deskripsi metode pembayaran yang akan dilihat pelanggan pada halaman checkout Anda.', 'beipay-for-woocommerce'),
-                'default'     => __('Lakukan pembayaran langsung ke rekening Bank Neo Commerce kami. Mohon gunakan ID Pesanan Anda sebagai referensi pembayaran. Pesanan Anda tidak akan dikirimkan hingga dana telah masuk ke rekening kami.', 'beipay-for-woocommerce'),
+                'description' => __('Deskripsi metode pembayaran yang akan dilihat pelanggan pada halaman checkout Anda.', 'indobe-for-woocommerce'),
+                'default'     => __('Lakukan pembayaran langsung ke rekening Bank Neo Commerce kami. Mohon gunakan ID Pesanan Anda sebagai referensi pembayaran. Pesanan Anda tidak akan dikirimkan hingga dana telah masuk ke rekening kami.', 'indobe-for-woocommerce'),
                 'desc_tip'    => true,
             ),
             'instructions'    => array(
-                'title'       => __('Instructions', 'beipay-for-woocommerce'),
+                'title'       => __('Instructions', 'indobe-for-woocommerce'),
                 'type'        => 'textarea',
-                'description' => __('Petunjuk yang akan ditambahkan ke halaman ucapan terima kasih dan email.', 'beipay-for-woocommerce'),
+                'description' => __('Petunjuk yang akan ditambahkan ke halaman ucapan terima kasih dan email.', 'indobe-for-woocommerce'),
                 'default'     => '',
                 'desc_tip'    => true,
             ),
@@ -156,14 +156,14 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
         $locale  = $this->get_country_locale();
 
         // Get sortcode label in the $locale array and use appropriate one.
-        $sortcode = isset($locale[$country]['sortcode']['label']) ? $locale[$country]['sortcode']['label'] : __('Kode Cabang', 'beipay-for-woocommerce');
+        $sortcode = isset($locale[$country]['sortcode']['label']) ? $locale[$country]['sortcode']['label'] : __('Kode Cabang', 'indobe-for-woocommerce');
 
         ?>
         <tr valign="top">
             <th scope="row" class="titledesc">
                 <label>
-                    <?php esc_html_e('Account details:', 'beipay-for-woocommerce'); ?>
-                    <?php echo wp_kses_post(wc_help_tip(__('Rincian akun ini akan ditampilkan di halaman terima kasih pesanan dan email konfirmasi.', 'beipay-for-woocommerce'))); ?>
+                    <?php esc_html_e('Account details:', 'indobe-for-woocommerce'); ?>
+                    <?php echo wp_kses_post(wc_help_tip(__('Rincian akun ini akan ditampilkan di halaman terima kasih pesanan dan email konfirmasi.', 'indobe-for-woocommerce'))); ?>
                 </label>
             </th>
             <td class="forminp" id="bank_neo_commerce_accounts">
@@ -172,11 +172,11 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
                         <thead>
                             <tr>
                                 <th class="sort">&nbsp;</th>
-                                <th><?php esc_html_e('Nama akun', 'beipay-for-woocommerce'); ?></th>
-                                <th><?php esc_html_e('Nomor rekening', 'beipay-for-woocommerce'); ?></th>
+                                <th><?php esc_html_e('Nama akun', 'indobe-for-woocommerce'); ?></th>
+                                <th><?php esc_html_e('Nomor rekening', 'indobe-for-woocommerce'); ?></th>
                                 <th><?php echo esc_html($sortcode); ?></th>
-                                <th><?php esc_html_e('IBAN', 'beipay-for-woocommerce'); ?></th>
-                                <th><?php esc_html_e('BIC / Swift', 'beipay-for-woocommerce'); ?></th>
+                                <th><?php esc_html_e('IBAN', 'indobe-for-woocommerce'); ?></th>
+                                <th><?php esc_html_e('BIC / Swift', 'indobe-for-woocommerce'); ?></th>
                             </tr>
                         </thead>
                         <tbody class="accounts">
@@ -200,31 +200,11 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="7"><a href="#" class="add button"><?php esc_html_e('+ Add account', 'beipay-for-woocommerce'); ?></a> <a href="#" class="remove_rows button"><?php esc_html_e('Remove selected account(s)', 'beipay-for-woocommerce'); ?></a></th>
+                                <th colspan="7"><a href="#" class="add button"><?php esc_html_e('+ Add account', 'indobe-for-woocommerce'); ?></a> <a href="#" class="remove_rows button"><?php esc_html_e('Remove selected account(s)', 'indobe-for-woocommerce'); ?></a></th>
                             </tr>
                         </tfoot>
                     </table>
-                </div>
-                <script type="text/javascript">
-                    jQuery(function() {
-                        jQuery('#bank_neo_commerce_accounts').on('click', 'a.add', function() {
-
-                            var size = jQuery('#bank_neo_commerce_accounts').find('tbody .account').length;
-
-                            jQuery('<tr class="account">\
-									<td class="sort"></td>\
-									<td><input type="text" name="bank_neo_commerce_account_name[' + size + ']" /></td>\
-									<td><input type="text" name="bank_neo_commerce_account_number[' + size + ']" /></td>\
-									<td><input type="text" name="bank_neo_commerce_sort_code[' + size + ']" /></td>\
-									<td><input type="text" name="bank_neo_commerce_iban[' + size + ']" /></td>\
-									<td><input type="text" name="bank_neo_commerce_bic[' + size + ']" /></td>\
-								</tr>').appendTo('#bank_neo_commerce_accounts table tbody');
-
-                            return false;
-                        });
-                    });
-                </script>
-            </td>
+                </div></td>
         </tr>
 <?php
         return ob_get_clean();
@@ -264,8 +244,8 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
         }
         // phpcs:enable
 
-        do_action('woocommerce_update_option', array('id' => 'woocommerce_bank_neo_commerce_accounts'));
-        update_option('woocommerce_bank_neo_commerce_accounts', $accounts);
+        do_action('woocommerce_update_option', array('id' => 'indobe_bank_neo_commerce_accounts'));
+        update_option('indobe_bank_neo_commerce_accounts', $accounts);
     }
 
     /**
@@ -299,7 +279,7 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
              * @param string $terms The order status.
              * @param object $order The order object.
              */
-            $instructions_order_status = apply_filters('woocommerce_bank_neo_commerce_email_instructions_order_status', OrderStatus::ON_HOLD, $order);
+            $instructions_order_status = apply_filters('indobe_bank_neo_commerce_email_instructions_order_status', OrderStatus::ON_HOLD, $order);
             if ($order->has_status($instructions_order_status)) {
                 if ($this->instructions) {
                     echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
@@ -328,9 +308,9 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
         $locale  = $this->get_country_locale();
 
         // Get sortcode label in the $locale array and use appropriate one.
-        $sortcode = isset($locale[$country]['sortcode']['label']) ? $locale[$country]['sortcode']['label'] : __('Kode Cabang', 'beipay-for-woocommerce');
+        $sortcode = isset($locale[$country]['sortcode']['label']) ? $locale[$country]['sortcode']['label'] : __('Kode Cabang', 'indobe-for-woocommerce');
 
-        $bank_neo_commerce_accounts = apply_filters('woocommerce_bank_neo_commerce_accounts', $this->account_details, $order_id);
+        $bank_neo_commerce_accounts = apply_filters('indobe_bank_neo_commerce_accounts', $this->account_details, $order_id);
 
         if (! empty($bank_neo_commerce_accounts)) {
             $account_html = '';
@@ -347,10 +327,10 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
 
                 // Bank Neo Commerce account fields shown on the thanks page and in emails.
                 $account_fields = apply_filters(
-                    'woocommerce_bank_neo_commerce_account_fields',
+                    'indobe_bank_neo_commerce_account_fields',
                     array(
                         'account_number' => array(
-                            'label' => __('Nomor Rekening', 'beipay-for-woocommerce'),
+                            'label' => __('Nomor Rekening', 'indobe-for-woocommerce'),
                             'value' => $bank_neo_commerce_account->account_number,
                         ),
                         'sort_code'      => array(
@@ -358,11 +338,11 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
                             'value' => $bank_neo_commerce_account->sort_code,
                         ),
                         'iban'           => array(
-                            'label' => __('IBAN', 'beipay-for-woocommerce'),
+                            'label' => __('IBAN', 'indobe-for-woocommerce'),
                             'value' => $bank_neo_commerce_account->iban,
                         ),
                         'bic'            => array(
-                            'label' => __('BIC', 'beipay-for-woocommerce'),
+                            'label' => __('BIC', 'indobe-for-woocommerce'),
                             'value' => $bank_neo_commerce_account->bic,
                         ),
                     ),
@@ -380,7 +360,7 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
             }
 
             if ($has_details) {
-                echo '<section class="woocommerce-bank-neo-commerce-bank-details"><h2 class="wc-bank-neo-commerce-bank-details-heading">' . esc_html__('Rincian rekening bank kami', 'beipay-for-woocommerce') . '</h2>' . wp_kses_post(PHP_EOL . $account_html) . '</section>';
+                echo '<section class="woocommerce-bank-neo-commerce-bank-details"><h2 class="wc-bank-neo-commerce-bank-details-heading">' . esc_html__('Rincian rekening bank kami', 'indobe-for-woocommerce') . '</h2>' . wp_kses_post(PHP_EOL . $account_html) . '</section>';
             }
         }
     }
@@ -404,9 +384,9 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
              * @param string $default_status The default order status.
              * @param object $order          The order object.
              */
-            $process_payment_status = apply_filters('woocommerce_bank_neo_commerce_process_payment_order_status', OrderStatus::ON_HOLD, $order);
+            $process_payment_status = apply_filters('indobe_bank_neo_commerce_process_payment_order_status', OrderStatus::ON_HOLD, $order);
             // Mark as on-hold (we're awaiting the payment).
-            $order->update_status($process_payment_status, __('Menunggu pembayaran dari Bank Neo Commerce.', 'beipay-for-woocommerce'));
+            $order->update_status($process_payment_status, __('Menunggu pembayaran dari Bank Neo Commerce.', 'indobe-for-woocommerce'));
         } else {
             $order->payment_complete();
         }
@@ -435,42 +415,42 @@ class WC_Gateway_Neo_Commerce extends WC_Payment_Gateway
                 array(
                     'AU' => array(
                         'sortcode' => array(
-                            'label' => __('BSB', 'beipay-for-woocommerce'),
+                            'label' => __('BSB', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'CA' => array(
                         'sortcode' => array(
-                            'label' => __('Bank transit number', 'beipay-for-woocommerce'),
+                            'label' => __('Bank transit number', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'IN' => array(
                         'sortcode' => array(
-                            'label' => __('IFSC', 'beipay-for-woocommerce'),
+                            'label' => __('IFSC', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'IT' => array(
                         'sortcode' => array(
-                            'label' => __('Branch sort', 'beipay-for-woocommerce'),
+                            'label' => __('Branch sort', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'NZ' => array(
                         'sortcode' => array(
-                            'label' => __('Bank code', 'beipay-for-woocommerce'),
+                            'label' => __('Bank code', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'SE' => array(
                         'sortcode' => array(
-                            'label' => __('Bank code', 'beipay-for-woocommerce'),
+                            'label' => __('Bank code', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'US' => array(
                         'sortcode' => array(
-                            'label' => __('Routing number', 'beipay-for-woocommerce'),
+                            'label' => __('Routing number', 'indobe-for-woocommerce'),
                         ),
                     ),
                     'ZA' => array(
                         'sortcode' => array(
-                            'label' => __('Branch code', 'beipay-for-woocommerce'),
+                            'label' => __('Branch code', 'indobe-for-woocommerce'),
                         ),
                     ),
                 )

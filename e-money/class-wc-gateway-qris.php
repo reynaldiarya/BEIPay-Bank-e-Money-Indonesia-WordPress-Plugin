@@ -60,10 +60,10 @@ class WC_Gateway_QRIS extends WC_Payment_Gateway
         $this->id                 = self::ID;
         $show_icon = 'yes' === $this->get_option('enable_icon', 'yes');
         $icon_url = $show_icon ? plugins_url('assets/logo-qris.png', __FILE__) : '';
-        $this->icon               = apply_filters('woocommerce_qris_icon', $icon_url);
+        $this->icon               = apply_filters('indobe_qris_icon', $icon_url);
         $this->has_fields         = false;
-        $this->method_title       = __('QRIS', 'beipay-for-woocommerce');
-        $this->method_description = __('Lakukan pembayaran melalui transfer langsung ke rekening QRIS.', 'beipay-for-woocommerce');
+        $this->method_title       = __('QRIS', 'indobe-for-woocommerce');
+        $this->method_description = __('Lakukan pembayaran melalui transfer langsung ke rekening QRIS.', 'indobe-for-woocommerce');
 
         // Load the settings.
         $this->init_form_fields();
@@ -90,44 +90,44 @@ class WC_Gateway_QRIS extends WC_Payment_Gateway
     {
         $this->form_fields = array(
             'enabled'         => array(
-                'title'   => __('Enable/Disable', 'beipay-for-woocommerce'),
+                'title'   => __('Enable/Disable', 'indobe-for-woocommerce'),
                 'type'    => 'checkbox',
-                'label'   => __('Enable QRIS', 'beipay-for-woocommerce'),
+                'label'   => __('Enable QRIS', 'indobe-for-woocommerce'),
                 'default' => 'no',
             ),
             'title'           => array(
-                'title'       => __('Title', 'beipay-for-woocommerce'),
+                'title'       => __('Title', 'indobe-for-woocommerce'),
                 'type'        => 'safe_text',
-                'description' => __('Mengatur judul yang dilihat pengguna selama proses checkout.', 'beipay-for-woocommerce'),
-                'default'     => __('Transfer QRIS', 'beipay-for-woocommerce'),
+                'description' => __('Mengatur judul yang dilihat pengguna selama proses checkout.', 'indobe-for-woocommerce'),
+                'default'     => __('Transfer QRIS', 'indobe-for-woocommerce'),
                 'desc_tip'    => true,
             ),
             'enable_icon' => array(
-                'title'         => __('Icon', 'beipay-for-woocommerce'),
-                'label'         => __('Enable Icon', 'beipay-for-woocommerce'),
+                'title'         => __('Icon', 'indobe-for-woocommerce'),
+                'label'         => __('Enable Icon', 'indobe-for-woocommerce'),
                 'type'          => 'checkbox',
                 'description'   => '<img src="' . plugins_url('assets/logo-qris.png', __FILE__) . '" style="height:100%;max-height:32px !important" />',
                 'default'       => 'yes',
             ),
             'description'     => array(
-                'title'       => __('Description', 'beipay-for-woocommerce'),
+                'title'       => __('Description', 'indobe-for-woocommerce'),
                 'type'        => 'textarea',
-                'description' => __('Deskripsi metode pembayaran yang akan dilihat pelanggan pada halaman checkout Anda.', 'beipay-for-woocommerce'),
-                'default'     => __('Lakukan pembayaran langsung ke rekening QRIS kami. Mohon gunakan ID Pesanan Anda sebagai referensi pembayaran. Pesanan Anda tidak akan dikirimkan hingga dana telah masuk ke rekening kami.', 'beipay-for-woocommerce'),
+                'description' => __('Deskripsi metode pembayaran yang akan dilihat pelanggan pada halaman checkout Anda.', 'indobe-for-woocommerce'),
+                'default'     => __('Lakukan pembayaran langsung ke rekening QRIS kami. Mohon gunakan ID Pesanan Anda sebagai referensi pembayaran. Pesanan Anda tidak akan dikirimkan hingga dana telah masuk ke rekening kami.', 'indobe-for-woocommerce'),
                 'desc_tip'    => true,
             ),
             'instructions'    => array(
-                'title'       => __('Instructions', 'beipay-for-woocommerce'),
+                'title'       => __('Instructions', 'indobe-for-woocommerce'),
                 'type'        => 'textarea',
-                'description' => __('Petunjuk yang akan ditambahkan ke halaman ucapan terima kasih dan email.', 'beipay-for-woocommerce'),
+                'description' => __('Petunjuk yang akan ditambahkan ke halaman ucapan terima kasih dan email.', 'indobe-for-woocommerce'),
                 'default'     => '',
                 'desc_tip'    => true,
             ),
             'qr_code' => array(
-                'title'       => __('Link QRIS', 'beipay-for-woocommerce'),
+                'title'       => __('Link QRIS', 'indobe-for-woocommerce'),
                 'type'        => 'text',
-                'description' => __('Masukkan Link QRIS.', 'beipay-for-woocommerce'),
-                'default'     => __('', 'beipay-for-woocommerce'),
+                'description' => __('Masukkan Link QRIS.', 'indobe-for-woocommerce'),
+                'default'     => '',
                 'desc_tip'    => true,
             ),
         );
@@ -164,7 +164,7 @@ class WC_Gateway_QRIS extends WC_Payment_Gateway
              * @param string $terms The order status.
              * @param object $order The order object.
              */
-            $instructions_order_status = apply_filters('woocommerce_qris_email_instructions_order_status', OrderStatus::ON_HOLD, $order);
+            $instructions_order_status = apply_filters('indobe_qris_email_instructions_order_status', OrderStatus::ON_HOLD, $order);
             if ($order->has_status($instructions_order_status)) {
                 if ($this->instructions) {
                     echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
@@ -211,9 +211,9 @@ class WC_Gateway_QRIS extends WC_Payment_Gateway
              * @param string $default_status The default order status.
              * @param object $order          The order object.
              */
-            $process_payment_status = apply_filters('woocommerce_qris_process_payment_order_status', OrderStatus::ON_HOLD, $order);
+            $process_payment_status = apply_filters('indobe_qris_process_payment_order_status', OrderStatus::ON_HOLD, $order);
             // Mark as on-hold (we're awaiting the payment).
-            $order->update_status($process_payment_status, __('Menunggu pembayaran dari QRIS.', 'beipay-for-woocommerce'));
+            $order->update_status($process_payment_status, __('Menunggu pembayaran dari QRIS.', 'indobe-for-woocommerce'));
         } else {
             $order->payment_complete();
         }

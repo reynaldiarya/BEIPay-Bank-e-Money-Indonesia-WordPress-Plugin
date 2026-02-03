@@ -1,17 +1,17 @@
 <?php
 
 /**
- * BEIPay Blocks Support
+ * Indobe Blocks Support
  *
- * @package BEIPay
+ * @package Indobe
  */
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
 /**
- * BEIPay Blocks integration class.
+ * Indobe Blocks integration class.
  */
-final class BEIPay_Blocks_Support extends AbstractPaymentMethodType
+final class Indobe_Blocks_Support extends AbstractPaymentMethodType
 {
     /**
      * Payment method name/id
@@ -37,7 +37,7 @@ final class BEIPay_Blocks_Support extends AbstractPaymentMethodType
         if ($gateway) {
             $this->gateway = $gateway;
             $this->name = $gateway->id;
-            $this->script_handle = 'beipay-for-woocommerce-' . $this->name . '-blocks';
+            $this->script_handle = 'indobe-' . $this->name . '-blocks';
         }
     }
 
@@ -74,9 +74,9 @@ final class BEIPay_Blocks_Support extends AbstractPaymentMethodType
 
         $script_asset = require $script_asset_path;
 
-        if (!wp_script_is('beipay-for-woocommerce-blocks-integration', 'registered')) {
+        if (!wp_script_is('indobe-blocks-integration', 'registered')) {
             wp_register_script(
-                'beipay-for-woocommerce-blocks-integration',
+                'indobe-blocks-integration',
                 $script_url,
                 $script_asset['dependencies'],
                 $script_asset['version'],
@@ -84,7 +84,7 @@ final class BEIPay_Blocks_Support extends AbstractPaymentMethodType
             );
         }
 
-        return ['beipay-for-woocommerce-blocks-integration'];
+        return ['indobe-blocks-integration'];
     }
 
     /**

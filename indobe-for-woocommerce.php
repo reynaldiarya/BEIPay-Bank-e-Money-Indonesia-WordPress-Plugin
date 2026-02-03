@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name:       BEIPay - Bank dan e-Money Indonesia
- * Plugin URI:        https://wordpress.org/plugins/beipay-for-woocommerce
+ * Plugin Name:       Indobe - Bank dan e-Money Indonesia
+ * Plugin URI:        https://wordpress.org/plugins/indobe-for-woocommerce
  * Description:       Plugin Pembayaran Bank dan e-Money Indonesia untuk WooCommerce. Mendukung kode unik pembayaran.
  * Version:           4.0.0
  * Author:            Reynaldi Arya
@@ -13,7 +13,8 @@
  * WC tested up to:   10.4
  * License:           GNU General Public License v3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       beipay-for-woocommerce
+ * Requires Plugins:  woocommerce
+ * Text Domain:       indobe-for-woocommerce
  */
 
 if (! defined('ABSPATH')) {
@@ -21,12 +22,12 @@ if (! defined('ABSPATH')) {
 }
 
 /**
- * Daftar Gateway BEIPay (Single Source of Truth)
+ * Daftar Gateway Indobe (Single Source of Truth)
  *
  * Format: 'class-file-name' => 'Class_Name'
  * Contoh: 'bni' => 'WC_Gateway_BNI'
  */
-define('BEIPay_GATEWAYS', [
+define('INDOBE_GATEWAYS', [
     // Bank
     'bank' => [
         'bni'          => 'WC_Gateway_BNI',
@@ -66,10 +67,10 @@ define('BEIPay_GATEWAYS', [
 /**
  * Helper: Mendapatkan semua class name gateway
  */
-function beipay_get_gateway_classes(): array
+function indobe_get_gateway_classes(): array
 {
     $classes = [];
-    foreach (BEIPay_GATEWAYS as $type => $gateways) {
+    foreach (INDOBE_GATEWAYS as $type => $gateways) {
         $classes = array_merge($classes, array_values($gateways));
     }
     return $classes;
@@ -93,19 +94,19 @@ add_action('woocommerce_blocks_loaded', function () {
         return;
     }
 
-    require_once dirname(__FILE__) . '/blocks/class-beipay-for-woocommerce-blocks-support.php';
+    require_once dirname(__FILE__) . '/blocks/class-indobe-blocks-support.php';
 
     add_action(
         'woocommerce_blocks_payment_method_type_registration',
         function (\Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry) {
             $gateways = WC()->payment_gateways()->payment_gateways();
-            $our_gateways = beipay_get_gateway_classes();
+            $our_gateways = indobe_get_gateway_classes();
 
             foreach ($gateways as $gateway) {
                 if ($gateway instanceof WC_Payment_Gateway && strpos(get_class($gateway), 'WC_Gateway_') === 0) {
                     $gateway_class = get_class($gateway);
                     if (in_array($gateway_class, $our_gateways, true)) {
-                        $payment_method_registry->register(new BEIPay_Blocks_Support($gateway));
+                        $payment_method_registry->register(new Indobe_Blocks_Support($gateway));
                     }
                 }
             }
@@ -123,12 +124,12 @@ add_action('plugins_loaded', function () {
             ?>
             <div class="notice notice-error is-dismissible">
                 <p>
-                    <strong>BEIPay Error:</strong> WooCommerce tidak ditemukan! 
-                    Plugin ini membutuhkan WooCommerce. 
-                    <br><em>Plugin BEIPay telah dinonaktifkan secara otomatis.</em>
+                    <strong>Indobe Error:</strong> WooCommerce tidak ditemukan!
+                    Plugin ini membutuhkan WooCommerce.
+                    <br><em>Plugin Indobe telah dinonaktifkan secara otomatis.</em>
                 </p>
             </div>
-            <?php
+<?php
         });
 
         // 2. Nonaktifkan Plugin Ini Secara Otomatis
@@ -149,8 +150,8 @@ add_action('plugins_loaded', function () {
         return;
     }
 
-    // Load Class Files berdasarkan BEIPay_GATEWAYS
-    foreach (BEIPay_GATEWAYS as $type => $gateways) {
+    // Load Class Files berdasarkan INDOBE_GATEWAYS
+    foreach (INDOBE_GATEWAYS as $type => $gateways) {
         foreach ($gateways as $file_slug => $class_name) {
             $file = dirname(__FILE__) . '/' . $type . '/class-wc-gateway-' . $file_slug . '.php';
             if (file_exists($file)) {
@@ -164,7 +165,7 @@ add_action('plugins_loaded', function () {
  * 4. Daftarkan Gateway ke WooCommerce
  */
 add_filter('woocommerce_payment_gateways', function ($methods) {
-    foreach (beipay_get_gateway_classes() as $gateway) {
+    foreach (indobe_get_gateway_classes() as $gateway) {
         if (class_exists($gateway)) {
             $methods[] = $gateway;
         }
@@ -173,11 +174,28 @@ add_filter('woocommerce_payment_gateways', function ($methods) {
 });
 
 /**
+ * 4a. Enqueue Admin Scripts
+ */
+add_action('admin_enqueue_scripts', function ($hook) {
+    // Only load on payment gateway settings pages
+    if ('woocommerce_page_wc-settings' !== $hook) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'indobe-admin-accounts',
+        plugins_url('assets/js/admin-accounts.js', __FILE__),
+        array('jquery', 'jquery-ui-sortable'),
+        '4.0.0',
+        true
+    );
+});
+
+/**
  * 5. Tambahkan Link di Bawah Deskripsi Plugin
  */
 add_filter('plugin_row_meta', function ($links, $plugin_file) {
     if (plugin_basename(__FILE__) === $plugin_file) {
-        $links[] = '<a href="https://clouden.id/" target="_blank" style="color:#5544f8; font-weight:bold;">Sponsor</a>';
         $links[] = '<a href="https://trakteer.id/reynaldiarya/tip" target="_blank" style="color:#3db634; font-weight:bold;">Donate</a>';
     }
     return $links;
@@ -187,7 +205,7 @@ add_filter('plugin_row_meta', function ($links, $plugin_file) {
  * 6. Pengaturan Tab "Advanced" untuk Kode Unik
  */
 add_filter('woocommerce_get_sections_advanced', function ($sections) {
-    $sections['puc'] = __('Kode Pembayaran', 'beipay-for-woocommerce');
+    $sections['puc'] = __('Kode Pembayaran', 'indobe-for-woocommerce');
     return $sections;
 });
 
@@ -196,43 +214,43 @@ add_filter('woocommerce_get_settings_advanced', function ($settings, $current_se
         $settings_puc = array();
 
         $settings_puc[] = array(
-            'name' => __('Pengaturan Kode Unik', 'beipay-for-woocommerce'),
+            'name' => __('Pengaturan Kode Unik', 'indobe-for-woocommerce'),
             'type' => 'title',
-            'desc' => __('Tambahkan 3 digit angka unik pada total pembayaran untuk mempermudah verifikasi transfer manual.', 'beipay-for-woocommerce'),
+            'desc' => __('Tambahkan 3 digit angka unik pada total pembayaran untuk mempermudah verifikasi transfer manual.', 'indobe-for-woocommerce'),
             'id'   => 'puc_options',
         );
 
         $settings_puc[] = array(
-            'name'    => __('Aktifkan Kode Unik', 'beipay-for-woocommerce'),
+            'name'    => __('Aktifkan Kode Unik', 'indobe-for-woocommerce'),
             'type'    => 'checkbox',
-            'desc'    => __('Ya, aktifkan penambahan kode unik otomatis.', 'beipay-for-woocommerce'),
-            'id'      => 'woocommerce_puc_enabled',
+            'desc'    => __('Ya, aktifkan penambahan kode unik otomatis.', 'indobe-for-woocommerce'),
+            'id'      => 'indobe_puc_enabled',
             'default' => 'no',
         );
 
         $settings_puc[] = array(
-            'name'        => __('Label Kode Unik', 'beipay-for-woocommerce'),
+            'name'        => __('Label Kode Unik', 'indobe-for-woocommerce'),
             'type'        => 'text',
-            'desc'        => __('Teks yang muncul di halaman checkout.', 'beipay-for-woocommerce'),
-            'id'          => 'woocommerce_puc_title',
+            'desc'        => __('Teks yang muncul di halaman checkout.', 'indobe-for-woocommerce'),
+            'id'          => 'indobe_puc_title',
             'default'     => 'Kode Pembayaran',
             'placeholder' => 'Kode Pembayaran',
         );
 
         $settings_puc[] = array(
-            'name'              => __('Angka Minimal', 'beipay-for-woocommerce'),
+            'name'              => __('Angka Minimal', 'indobe-for-woocommerce'),
             'type'              => 'number',
-            'desc'              => __('Batas bawah angka acak (Misal: 1).', 'beipay-for-woocommerce'),
-            'id'                => 'woocommerce_puc_min',
+            'desc'              => __('Batas bawah angka acak (Misal: 1).', 'indobe-for-woocommerce'),
+            'id'                => 'indobe_puc_min',
             'default'           => '1',
             'custom_attributes' => array('min' => 1)
         );
 
         $settings_puc[] = array(
-            'name'    => __('Angka Maksimal', 'beipay-for-woocommerce'),
+            'name'    => __('Angka Maksimal', 'indobe-for-woocommerce'),
             'type'    => 'number',
-            'desc'    => __('Batas atas angka acak (Misal: 999).', 'beipay-for-woocommerce'),
-            'id'      => 'woocommerce_puc_max',
+            'desc'    => __('Batas atas angka acak (Misal: 999).', 'indobe-for-woocommerce'),
+            'id'      => 'indobe_puc_max',
             'default' => '999',
             'custom_attributes' => array('max' => 999)
         );
@@ -251,7 +269,7 @@ add_action('woocommerce_cart_calculate_fees', function ($cart) {
         return;
     }
 
-    if ('yes' !== get_option('woocommerce_puc_enabled')) {
+    if ('yes' !== get_option('indobe_puc_enabled')) {
         return;
     }
 
@@ -259,11 +277,11 @@ add_action('woocommerce_cart_calculate_fees', function ($cart) {
         return;
     }
 
-    $min   = (int) get_option('woocommerce_puc_min', 1);
-    $max   = (int) get_option('woocommerce_puc_max', 999);
-    $title = get_option('woocommerce_puc_title', 'Kode Pembayaran');
+    $min   = (int) get_option('indobe_puc_min', 1);
+    $max   = (int) get_option('indobe_puc_max', 999);
+    $title = get_option('indobe_puc_title', 'Kode Pembayaran');
 
-    $unique_code = WC()->session->get('beipay_unique_code');
+    $unique_code = WC()->session->get('indobe_unique_code');
 
     if (! $unique_code) {
         try {
@@ -271,7 +289,7 @@ add_action('woocommerce_cart_calculate_fees', function ($cart) {
         } catch (Exception $e) {
             $unique_code = wp_rand($min, $max); // Fallback
         }
-        WC()->session->set('beipay_unique_code', $unique_code);
+        WC()->session->set('indobe_unique_code', $unique_code);
     }
 
     if ($unique_code > 0) {
@@ -284,6 +302,6 @@ add_action('woocommerce_cart_calculate_fees', function ($cart) {
  */
 add_action('woocommerce_thankyou', function () {
     if (WC()->session) {
-        WC()->session->__unset('beipay_unique_code');
+        WC()->session->__unset('indobe_unique_code');
     }
 });

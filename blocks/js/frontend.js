@@ -6,8 +6,8 @@
   const { getSetting } = window.wc.wcSettings;
   const { createElement } = window.wp.element;
 
-  // All BEIPay gateway IDs
-  const beipayGateways = [
+  // All Indobe gateway IDs
+  const indobeGateways = [
     "bank_bni",
     "bank_bca",
     "bank_bri",
@@ -41,7 +41,7 @@
   /**
    * Create and register a payment method for a gateway
    */
-  const registerBEIPayGateway = (gatewayId) => {
+  const registerIndobeGateway = (gatewayId) => {
     const settings = getSetting(gatewayId + "_data", null);
 
     if (!settings) {
@@ -65,7 +65,7 @@
             alt: title,
             style: { maxHeight: "24px" },
           }),
-          title
+          title,
         );
       }
 
@@ -91,12 +91,12 @@
     });
   };
 
-  // Register all BEIPay payment methods
-  beipayGateways.forEach((gatewayId) => {
+  // Register all Indobe payment methods
+  indobeGateways.forEach((gatewayId) => {
     try {
-      registerBEIPayGateway(gatewayId);
+      registerIndobeGateway(gatewayId);
     } catch (e) {
-      console.log("BEIPay: Could not register " + gatewayId, e);
+      console.log("Indobe: Could not register " + gatewayId, e);
     }
   });
 })();
