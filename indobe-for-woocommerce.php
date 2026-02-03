@@ -174,24 +174,6 @@ add_filter('woocommerce_payment_gateways', function ($methods) {
 });
 
 /**
- * 4a. Enqueue Admin Scripts
- */
-add_action('admin_enqueue_scripts', function ($hook) {
-    // Only load on payment gateway settings pages
-    if ('woocommerce_page_wc-settings' !== $hook) {
-        return;
-    }
-
-    wp_enqueue_script(
-        'indobe-admin-accounts',
-        plugins_url('assets/js/admin-accounts.js', __FILE__),
-        array('jquery', 'jquery-ui-sortable'),
-        '4.0.0',
-        true
-    );
-});
-
-/**
  * 5. Tambahkan Link di Bawah Deskripsi Plugin
  */
 add_filter('plugin_row_meta', function ($links, $plugin_file) {
